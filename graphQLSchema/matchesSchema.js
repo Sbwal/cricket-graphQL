@@ -89,17 +89,34 @@ const schema = new GraphQLSchema({
         fields: {
             matches: {
                 type: GraphQLList(MatchType),
-                resolve: (root, args, context, info) => {
-                    return MatcheModel.find().exec();
+                resolve: async (root, args, context, info) => {
+                    return await MatcheModel.find().exec();
                 }
             },
-            match: {
+            getMatchById: {
                 type: MatchType,
                 args: {
                     match_Id: { type: GraphQLNonNull(GraphQLString)}
                 },
-                resolve: (root, args, context, info) => {
-                    return MatcheModel.find({match_Id: args.match_Id}).exec();
+                resolve: async (root, args, context, info) => {
+                    return await MatcheModel.findOne({match_Id: args.match_Id}).exec();
+                }
+            },
+            getMatchesByDateRange: {
+                type: GraphQLList(MatchType),
+                args: {
+                    start_date: { type: GraphQLNonNull(GraphQLString)},
+                    end_date: { type: GraphQLNonNull(GraphQLString)}
+                },
+                resolve: async (root, args, context, info) => {
+                    let matches = await MatcheModel.find().exec();
+                    const start_date = new Date(args.start_date);
+                    const end_date = new Date(args.end_date);
+                    matches = matches.filter(match => {
+                        const date = new Date(match.matchdate_ist);
+                        return date >= start_date && date <= end_date;
+                    })
+                    return matches;
                 }
             }
         }

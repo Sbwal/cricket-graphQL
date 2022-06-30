@@ -16,7 +16,7 @@ app.use("/graphql", expressGraphQL({
 }))
 
 app.use("/matches", async (req, res) => {
-    const matches = await MatcheModel.find({match_Id: 198673}).exec();
+    const matches = await MatcheModel.find({match_Id: "198673"}).exec();
     res.send(JSON.stringify(matches));
 })
 
