@@ -88,13 +88,6 @@ const schema = new GraphQLSchema({
     query: new GraphQLObjectType({
         name: "Query",
         fields: {
-            matches: {
-                type: GraphQLList(MatchType),
-                resolve: async (root, args, context, info) => {
-                    console.log(`In matches`);
-                    return await MatchModel.find().exec();
-                }
-            },
             getMatchById: {
                 type: MatchType,
                 args: {
@@ -133,7 +126,6 @@ const schema = new GraphQLSchema({
                     console.log(`In getmatchesByPagination :: pagination: ${args.pagination}`);
                     const startIndex = (args.pagination - 1) * 10;
                     const endIndex = startIndex + 9;
-                    console.log(startIndex, endIndex);
                     matches = matches.slice(startIndex, endIndex);
                     return matches;
                 }
