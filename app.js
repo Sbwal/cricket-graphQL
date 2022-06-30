@@ -10,14 +10,9 @@ const mongoURL = process.env.MONGOURL;
 
 Mongoose.connect(mongoURL);
 
-app.get("/graphql", expressGraphQL({
+app.use("/graphql", expressGraphQL({
     schema: MatchesSchema,
     graphiql: true
-}))
-
-app.post("/graphql", expressGraphQL({
-    schema: MatchesSchema,
-    graphiql: false
 }))
 
 app.listen(process.env.PORT, () => {
